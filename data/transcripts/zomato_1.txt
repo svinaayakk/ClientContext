@@ -1,0 +1,34 @@
+Sales: Thanks for joining. We'd like to understand some of the
+operational challenges your team is currently facing.
+
+Ananya: Sure. One of our biggest challenges is understanding
+delivery delays at the zone level. We have overall metrics, but
+it's difficult to identify which zones are causing problems.
+
+Sales: What would you ideally want the system to provide?
+
+Ananya: We'd like a dashboard that shows delivery performance
+by zone and highlights areas where delays are increasing.
+
+Sales: Are there any other metrics that are important?
+
+Ananya: Cancellation rate and average delivery time are probably
+the two most important ones. We'd also like to compare performance
+during peak hours.
+
+Sales: Do you have a specific timeline?
+
+Ananya: We'd like an initial version by February.
+
+Sales: Who would be involved in evaluating the solution?
+
+Ananya: The operations team will evaluate the product first.
+Our data engineering team will review the technical side later.
+
+Sales: Is there anything you're concerned about?
+
+Ananya: Data integration is my main concern. We already have several
+internal systems and I don't want another manual data pipeline.
+
+Sales: Understood. We'll prepare a proposed architecture and
+schedule a technical discussion with the data engineering team.

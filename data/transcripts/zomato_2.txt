@@ -1,0 +1,24 @@
+Sales: Thanks for joining again, Ananya. I wanted to follow up
+on the delivery performance dashboard we discussed last time.
+
+Ananya: Yes. The dashboard requirements are still relevant.
+The zone-level delivery metrics are especially important.
+
+Sales: Has the data integration concern been resolved?
+
+Ananya: We reviewed our internal systems with the data engineering team.
+The integration approach looks feasible now, so that is no longer
+our biggest concern.
+
+Sales: Is there anything else you would like us to focus on?
+
+Ananya: Yes. We now want the dashboard to integrate with Salesforce
+so our operations managers can see customer information alongside
+delivery performance.
+
+Sales: Understood. Would the February timeline still work?
+
+Ananya: Yes, February still works for the initial version.
+
+Sales: Great. We'll update the architecture to include Salesforce
+integration and discuss it with your data engineering team.
