@@ -1,0 +1,34 @@
+Sales: Hi Ananya, good to speak again. I wanted to revisit
+the dashboard requirements and see if anything has changed.
+
+Ananya: The basic dashboard is still what we discussed.
+We definitely need the zone-level numbers.
+
+Sales: And the delay alerts?
+
+Ananya: Yes, although I don't think we need them to be real-time.
+Daily updates should be enough for now.
+
+Sales: Got it. What about the Salesforce integration?
+
+Ananya: That's still important. Actually, the operations managers
+want the customer details visible without switching between systems.
+
+Sales: Understood. Any concerns from the data engineering team?
+
+Ananya: The integration itself looks fine now. They were worried
+about the manual work earlier, but that's not really an issue anymore.
+
+Sales: Has anything changed regarding the timeline?
+
+Ananya: February is still the target for the initial version.
+We may want the Salesforce part in the first release too, though.
+
+Sales: Anything else?
+
+Ananya: One more thing. The operations team wants an alert when
+cancellation rates suddenly increase in a zone. It doesn't need
+to be instant, but we'd like to see those alerts in the dashboard.
+
+Sales: Okay. We'll update the architecture and include the
+cancellation alert requirement in the next discussion.
