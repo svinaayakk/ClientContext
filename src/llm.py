@@ -1,13 +1,17 @@
 import os
+
 from dotenv import load_dotenv
 from google import genai
+
 from .models import MeetingAnalysis, ContextUpdate, ClientAnswer
+
 
 load_dotenv()
 
 client = genai.Client(
     api_key=os.getenv("GEMINI_API_KEY")
 )
+
 
 def analyze_meeting(transcript: str) -> MeetingAnalysis:
 
@@ -66,7 +70,7 @@ Compare the PREVIOUS meeting with the CURRENT meeting and determine
 how the client's business context has evolved.
 
 Your job is NOT to simply compare text.
-You must reason about the meaning and status of each issue.
+You must reason about the meaning, status, and evolution of each issue.
 
 CLASSIFICATION RULES:
 
@@ -86,13 +90,27 @@ RESOLVED:
 NEW:
 - A genuinely new requirement, concern, pain point, objection, or
   business need introduced in the current meeting.
+- Only classify something as NEW if it represents a genuinely different
+  underlying need that did not already exist in the previous meeting.
+- A changed version of an existing requirement is NOT NEW.
 
 CHANGED:
 - Information that existed previously but has materially changed.
-- Examples include a changed scope, changed status, changed priority,
-  or changed implementation approach.
+- Examples include:
+  - changed scope
+  - changed status
+  - changed priority
+  - changed timing
+  - changed frequency
+  - changed implementation approach
+  - changed level of detail
+- If a current requirement refers to the same underlying requirement as
+  a previous requirement but changes its timing, scope, priority, frequency,
+  or implementation detail, classify it as CHANGED rather than NEW.
+- The new wording of a changed requirement must NOT be listed under NEW.
 
 IMPORTANT:
+
 1. Compare meaning, not exact wording.
 2. Do not treat synonyms as new information.
 3. Do not duplicate the same underlying issue across CURRENT and NEW.
@@ -100,6 +118,54 @@ IMPORTANT:
 5. Do not keep a resolved issue in CURRENT.
 6. Do not invent information that is not supported by either meeting.
 7. Keep each item concise and understandable without additional context.
+8. NEW and CHANGED must be mutually exclusive for the same underlying concept.
+9. If a previous requirement is modified in the current meeting, report
+   the modification under CHANGED and do not report the modified version
+   as NEW.
+10. A genuinely new requirement should appear under NEW only if there is
+    no corresponding underlying requirement in the previous meeting.
+
+IMPORTANT EXAMPLE:
+
+Previous requirement:
+"Real-time delay alerts"
+
+Current requirement:
+"Daily delay alerts"
+
+Correct classification:
+
+CHANGED:
+"Delay alerts changed from real-time to daily"
+
+NEW:
+Nothing for the delay-alert requirement.
+
+Another example:
+
+Previous requirement:
+"Delivery performance dashboard"
+
+Current requirement:
+"Delivery performance dashboard with Salesforce integration"
+
+Correct classification:
+
+CHANGED:
+"Dashboard scope expanded to include Salesforce integration"
+
+NEW:
+Nothing for the existing dashboard requirement.
+
+If the current meeting introduces:
+"Cancellation rate increase alerts per zone"
+
+and this did not exist previously, then:
+
+NEW:
+"Cancellation rate increase alerts per zone"
+
+Do not place the same underlying concept in both NEW and CHANGED.
 
 PREVIOUS MEETING:
 
@@ -121,6 +187,7 @@ CURRENT MEETING:
     )
 
     return ContextUpdate.model_validate_json(response.text)
+
 
 def answer_client_question(question, client_memory, meeting_contexts):
 

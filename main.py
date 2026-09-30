@@ -48,3 +48,12 @@ print("\n===== MEETING 2 CONTEXT =====")
 for key, value in context.items():
     print(f"\n{key.upper()}:")
     print(value)
+
+with open("data/transcripts/zomato_3.txt", "r") as file:
+    transcript_3 = file.read()
+
+result_3 = analyze_meeting(transcript_3)
+meeting_id_3 = save_meeting(result_3)
+
+print("\nMeeting 3 saved!")
+print("Meeting ID:", meeting_id_3)    
