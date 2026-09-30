@@ -1,0 +1,27 @@
+Sales: Ananya, last meeting ke requirements ke baare mein
+quickly follow up karna tha. Dashboard overall theek hai?
+
+Ananya: Haan, dashboard theek hai. Bas zone-wise delivery delays
+clearly visible hone chahiye, taaki operations team identify
+kar sake ki problem kis zone mein hai.
+
+Sales: Got it. Cancellation rate ke baare mein kuch?
+
+Ananya: Haan, cancellation rate bhi track karna hai.
+Especially jab kisi zone mein suddenly cancellation spike ho.
+
+Sales: Kya uske liye real-time alert chahiye?
+
+Ananya: Nahi, real-time zaroori nahi hai. Daily update enough rahega.
+
+Sales: Salesforce integration abhi bhi required hai?
+
+Ananya: Haan, woh important hai. Operations managers ko customer
+details aur delivery performance ek hi jagah dekhni hai.
+
+Sales: Timeline same rahegi?
+
+Ananya: Haan, February target hai for the initial version.
+
+Sales: Perfect. Hum architecture update karke next discussion mein
+share kar denge.

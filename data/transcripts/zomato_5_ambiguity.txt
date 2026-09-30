@@ -1,0 +1,34 @@
+Sales: Ananya, before we finalize the dashboard, I wanted to
+confirm a few things from the previous discussions.
+
+Ananya: Sure.
+
+Sales: The daily delay updates are still okay?
+
+Ananya: Yes, daily is fine for now. But during peak hours,
+it would be useful if the operations team could get a quicker
+view when delays become unusually high.
+
+Sales: So do you want real-time alerts again?
+
+Ananya: Not exactly. I don't think we need an alert for every
+small delay. Maybe only when the delay crosses a certain level.
+
+Sales: Understood. What about the cancellation alerts?
+
+Ananya: Those are still required. But the operations team wants
+to be able to choose which zones they want to monitor.
+
+Sales: Got it. And Salesforce integration?
+
+Ananya: Yes, that's still part of the first release.
+
+Sales: Has the February timeline changed?
+
+Ananya: The target is still February, although the exact release
+date isn't finalized yet.
+
+Sales: Anything else?
+
+Ananya: We'd also like a weekly summary that the operations manager
+can share with the leadership team.

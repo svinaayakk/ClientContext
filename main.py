@@ -1,59 +1,68 @@
+import os
+
 from src.llm import analyze_meeting
-from src.database import create_tables, save_meeting
-from src.context import get_meeting_context
+from src.database import (
+    create_tables,
+    save_meeting,
+    meeting_exists
+)
 
 
-# Create database tables
-create_tables()
+TRANSCRIPT_DIR = "data/transcripts"
 
 
-# -----------------------------
-# Process Meeting 1
-# -----------------------------
+def process_transcript(filename):
 
-with open("data/transcripts/zomato_1.txt", "r") as file:
-    transcript_1 = file.read()
+    source_file = os.path.basename(filename)
 
-result_1 = analyze_meeting(transcript_1)
+    existing_id = meeting_exists(source_file)
 
-meeting_id_1 = save_meeting(result_1)
+    if existing_id:
+        print(f"Skipping {source_file} — already processed (Meeting ID: {existing_id})")
+        return existing_id
 
-print("\nMeeting 1 saved!")
-print("Meeting ID:", meeting_id_1)
+    print(f"\nAnalyzing {source_file}...")
 
+    with open(filename, "r") as file:
+        transcript = file.read()
 
-# -----------------------------
-# Process Meeting 2
-# -----------------------------
+    result = analyze_meeting(transcript)
 
-with open("data/transcripts/zomato_2.txt", "r") as file:
-    transcript_2 = file.read()
+    meeting_id = save_meeting(
+        result,
+        source_file
+    )
 
-result_2 = analyze_meeting(transcript_2)
+    print(f"Saved {source_file} as Meeting ID: {meeting_id}")
 
-meeting_id_2 = save_meeting(result_2)
-
-print("\nMeeting 2 saved!")
-print("Meeting ID:", meeting_id_2)
+    return meeting_id
 
 
-# -----------------------------
-# Retrieve Meeting 2 context
-# -----------------------------
+def main():
 
-context = get_meeting_context(meeting_id_2)
+    create_tables()
 
-print("\n===== MEETING 2 CONTEXT =====")
+    transcripts = sorted(
+        filename
+        for filename in os.listdir(TRANSCRIPT_DIR)
+        if filename.endswith(".txt")
+    )
 
-for key, value in context.items():
-    print(f"\n{key.upper()}:")
-    print(value)
+    if not transcripts:
+        print("No transcripts found.")
+        return
 
-with open("data/transcripts/zomato_3.txt", "r") as file:
-    transcript_3 = file.read()
+    print(f"Found {len(transcripts)} transcript(s).")
 
-result_3 = analyze_meeting(transcript_3)
-meeting_id_3 = save_meeting(result_3)
+    for filename in transcripts:
 
-print("\nMeeting 3 saved!")
-print("Meeting ID:", meeting_id_3)    
+        filepath = os.path.join(
+            TRANSCRIPT_DIR,
+            filename
+        )
+
+        process_transcript(filepath)
+
+
+if __name__ == "__main__":
+    main()

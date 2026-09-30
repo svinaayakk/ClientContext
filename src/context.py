@@ -68,39 +68,33 @@ def get_meeting_context(meeting_id):
 
     return context
 
-
 def build_client_memory(previous_context, current_context, context_update):
 
     memory = {
         "client_name": current_context["client_name"],
+
+        # Current state
         "current_needs": [],
-        "resolved_items": [],
-        "new_items": [],
-        "changed_items": [],
         "timeline": current_context["timeline"],
         "budget": current_context["budget"],
         "stakeholders": current_context["stakeholders"],
-        "latest_sentiment": current_context["sentiment"]
+        "latest_sentiment": current_context["sentiment"],
+
+        # Change history
+        "resolved_items": context_update.resolved,
+        "new_items": context_update.new,
+        "changed_items": context_update.changed
     }
 
-    # Current information identified by Gemini
+    # Start with the latest meeting's requirements.
     memory["current_needs"].extend(
-        context_update.current
+        current_context["requirements"]
     )
 
-    # Things that are no longer active
-    memory["resolved_items"].extend(
-        context_update.resolved
-    )
+    # Add important current items identified by the comparison.
+    for item in context_update.current:
 
-    # Newly introduced information
-    memory["new_items"].extend(
-        context_update.new
-    )
-
-    # Information that changed
-    memory["changed_items"].extend(
-        context_update.changed
-    )
+        if item not in memory["current_needs"]:
+            memory["current_needs"].append(item)
 
     return memory

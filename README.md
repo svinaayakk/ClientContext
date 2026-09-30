@@ -1,75 +1,112 @@
-# ClientContext
+ClientContext
 
-AI-powered conversational intelligence system that extracts, tracks, and retrieves evolving client context across business meetings using LLMs.
+-AI-Powered Client Intelligence System
 
-## Overview
+ClientContext is an LLM-based system that extracts and tracks important client information across multiple business meetings.
 
-ClientContext analyzes business meeting transcripts and converts unstructured conversations into structured client intelligence.
+It helps identify client requirements, pain points, objections, decisions, action items, and changes in requirements over time.
 
-The system can:
+-Key Features
 
-- Extract client requirements, pain points, objections, decisions, action items, timelines, budgets, and stakeholders.
-- Store meeting information in SQLite.
-- Compare information across multiple meetings.
-- Identify what is still active, resolved, newly introduced, or changed.
-- Build an evolving client memory.
-- Answer questions about the client using meeting context.
-- Provide meeting-level evidence supporting generated answers.
+- Structured extraction of meeting information using an LLM
+- Pydantic-based structured outputs
+- SQLite storage for meeting data
+- Cross-meeting context comparison
+- Client memory for tracking new, resolved, and changed requirements
+- Evidence-based Q&A over stored meeting context
+- Basic evaluation using manually defined ground truth
 
-The project focuses on building reliable LLM-powered conversation intelligence rather than simply generating summaries.
+## System Workflow
 
----
 
-## Problem
+Meeting Transcript
+        ↓
+LLM Analysis
+        ↓
+Structured Pydantic Output
+        ↓
+SQLite Database
+        ↓
+Cross-Meeting Context Comparison
+        ↓
+Client Memory
+        ↓
+Question Answering + Evidence
 
-Important information from business conversations is often scattered across multiple meetings.
 
-For example, a client may:
+Tech Stack
+Python
+Gemini API
+Pydantic
+SQLite
+python-dotenv
 
-- introduce a requirement in one meeting,
-- raise an objection in another,
-- resolve that objection later,
-- and introduce a new requirement several weeks afterward.
 
-A simple meeting summarizer treats each conversation independently.
+Project Structure
+ClientContext/
+│
+├── data/
+│   └── transcripts/
+│
+├── database/
+│   └── clientcontext.db
+│
+├── evaluation/
+│   ├── ground_truth.py
+│   └── evaluator.py
+│
+├── src/
+│   ├── models.py
+│   ├── llm.py
+│   ├── database.py
+│   ├── context.py
+│   └── prompts.py
+│
+├── main.py
+├── check_models.py
+├── requirements.txt
+└── README.md
 
-ClientContext instead maintains an evolving representation of the client's context across meetings.
 
----
+Example
 
-## Architecture
+The system processes multiple meetings with the same client and tracks how their requirements evolve.
+For example:
 
-                Business Meeting Transcript
-                           |
-                           v
-                  +------------------+
-                  |   LLM Analysis   |
-                  +------------------+
-                           |
-                           v
-                 Structured Pydantic
-                      Output
-                           |
-                           v
-                    SQLite Database
-                           |
-                           v
-              +-----------------------+
-              | Meeting Context       |
-              | Retrieval             |
-              +-----------------------+
-                           |
-                           v
-              +-----------------------+
-              | Cross-Meeting         |
-              | Context Comparison    |
-              +-----------------------+
-                           |
-                           v
-                  Client Memory
-                           |
-                           v
-                 Question Answering
-                           |
-                           v
-              Evidence-Grounded Answer
+Meeting 1
+→ Zone-level delivery dashboard
+→ Delivery delay visibility
+→ Data integration concern
+
+Meeting 2
+→ Salesforce integration added
+→ Data integration concern resolved
+
+Meeting 3
+→ Daily delay alerts
+→ Zone-level cancellation alerts
+→ Salesforce integration remains important
+
+The system can then answer questions such as:
+
+What are Ananya's current requirements after the latest meeting?
+
+and return an answer together with supporting meeting evidence.
+
+Evaluation
+
+The project includes a small evaluation framework using manually defined ground-truth concepts for selected meeting transcripts.
+The evaluation measures extraction recall for important fields and checks for known unsupported extractions.
+The evaluation is intended for basic error analysis rather than as a statistically representative benchmark.
+
+Limitations
+Uses synthetic meeting transcripts rather than real client conversations.
+The current system does not use a vector database or embedding-based retrieval.
+Evaluation is based on a small manually created ground-truth dataset.
+LLM outputs can vary between runs.
+Future Improvements
+Add larger and more diverse evaluation datasets
+Improve semantic retrieval across a larger meeting history
+Add richer evidence retrieval
+Add a lightweight dashboard for exploring client context
+Add support for more complex conversation formats

@@ -188,8 +188,15 @@ CURRENT MEETING:
 
     return ContextUpdate.model_validate_json(response.text)
 
-
 def answer_client_question(question, client_memory, meeting_contexts):
+
+    formatted_contexts = []
+
+    for meeting_id, context in meeting_contexts:
+        formatted_contexts.append({
+            "meeting_id": meeting_id,
+            "context": context
+        })
 
     prompt = f"""
 You are a business conversation intelligence assistant.
@@ -204,10 +211,13 @@ IMPORTANT RULES:
 - If an older issue was explicitly resolved, do not present it as current.
 - Keep the answer concise and business-focused.
 - Every important claim should be supported by evidence from a meeting.
-- Evidence must identify the meeting_id.
+- Evidence meeting_id MUST be one of the meeting IDs explicitly provided below.
+- Never invent, infer, or change a meeting_id.
 - Evidence text should be a short, faithful statement of what was
   actually mentioned in that meeting.
 - Do not create evidence that is not supported by the meeting context.
+- If the question concerns a change between meetings, use evidence
+  from the relevant meetings.
 
 CLIENT MEMORY:
 
@@ -216,7 +226,7 @@ CLIENT MEMORY:
 
 MEETING CONTEXTS:
 
-{meeting_contexts}
+{formatted_contexts}
 
 
 USER QUESTION:

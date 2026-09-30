@@ -11,10 +11,10 @@ def create_tables():
     conn = get_connection()
     cursor = conn.cursor()
 
-    # Stores information about each meeting
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS meetings (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            source_file TEXT UNIQUE,
             client_name TEXT NOT NULL,
             meeting_summary TEXT,
             timeline TEXT,
@@ -23,8 +23,6 @@ def create_tables():
         )
     """)
 
-    # Stores lists extracted from each meeting
-    # e.g. pain points, requirements, objections, etc.
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS meeting_items (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -39,22 +37,40 @@ def create_tables():
     conn.close()
 
 
-def save_meeting(meeting):
+def meeting_exists(source_file):
     conn = get_connection()
     cursor = conn.cursor()
 
-    # Save main meeting information
+    cursor.execute("""
+        SELECT id
+        FROM meetings
+        WHERE source_file = ?
+    """, (source_file,))
+
+    result = cursor.fetchone()
+
+    conn.close()
+
+    return result[0] if result else None
+
+
+def save_meeting(meeting, source_file):
+    conn = get_connection()
+    cursor = conn.cursor()
+
     cursor.execute("""
         INSERT INTO meetings
         (
+            source_file,
             client_name,
             meeting_summary,
             timeline,
             budget,
             sentiment
         )
-        VALUES (?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?)
     """, (
+        source_file,
         meeting.client_name,
         meeting.meeting_summary,
         meeting.timeline,
@@ -62,10 +78,8 @@ def save_meeting(meeting):
         meeting.sentiment
     ))
 
-    # Get ID of the meeting we just inserted
     meeting_id = cursor.lastrowid
 
-    # Information that can contain multiple items
     categories = {
         "pain_point": meeting.pain_points,
         "requirement": meeting.requirements,
@@ -75,11 +89,8 @@ def save_meeting(meeting):
         "stakeholder": meeting.stakeholders
     }
 
-    # Save each individual item
     for category, items in categories.items():
-
         for item in items:
-
             cursor.execute("""
                 INSERT INTO meeting_items
                 (
